@@ -711,7 +711,7 @@ void squeeze_partition_array(vector<_int> &partition){
   for(_int i=0; i<partition.size(); i++)
     partition[i] = old2new[partition[i]];
 }
-
+///////////////kmeansplusplus//////////////////////////
 vector<_int> kmeansplusplus(SMatF *mat, _int K){
 	int start = rand() % K;
 
@@ -755,6 +755,453 @@ vector<_int> kmeansplusplus(SMatF *mat, _int K){
   	return v;
 }
 
+//////////////////Kmeansplusplus//////////////////////
+// //////////////////////Balanced Kmeans//////////////
+
+bool sortbysec(const pair<int,int> &a, 
+              const pair<int,int> &b) 
+{ 
+    return (a.second < b.second); 
+} 
+
+
+// void balancedkmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
+//   // acc: accuracy parameter, when smaller than this, the iteration stops
+//   // should be epsilon
+//   Timer timer;
+//   timer.resume();
+
+//   _int nc = mat->nc;  // number of data points
+//   _int nr = mat->nr; // feature dim
+  
+//   _int max_nodes = nc/K ;
+//   cout << max_nodes <<" fdgvdfzxcxv dfxcvvdfzxcvdzxfcvdzfxcvsdxvdgfbv";
+
+//   vector<int> c(K);
+//   // cout << "kmeansplusplus" <<endl;
+//   // c = kmeansplusplus(mat, k);
+//   // cout << "kmeansplusplus" << endl;
+//   c = pick(nc, K);
+  
+//   if(KMEANS_DEBUG) {
+//     cout << "c: ";
+//     std::copy(c.begin(), c.end(), std::ostream_iterator<int>(std::cout, " "));
+//     cout << endl;
+//   }
+
+//   _float** centers;
+//   init_2d_float(K, nr, centers );//initialize K centres with nr dimension
+//   reset_2d_float(K, nr, centers );
+//   for( _int i=0; i<K; i++ )
+//     set_d_with_s( mat->data[c[i]], mat->size[c[i]], centers[i] );// put the centres in Centers matrix using c[i]
+
+//   _float** cosines;
+//   init_2d_float( K, nc, cosines );
+
+
+//   // vector<_int> c(K);
+//   //   cout<<"kmeansplusplus started"<<endl;
+//   //   //c = kmeansplusplus(mat, K);
+//   //   cout<<"kmeansplusplus ended"<<endl;
+//   //   c = pick(nc, K);
+  
+  
+//   if(KMEANS_DEBUG) {
+//     cout << "c: ";
+//     std::copy(c.begin(), c.end(), std::ostream_iterator<int>(std::cout, " "));
+//     cout << endl;
+//   }
+
+//   // _float** centers;
+//   // init_2d_float(K, nr, centers );//initialize K centres with nr dimension
+//   // reset_2d_float(K, nr, centers );
+//   // for( _int i=0; i<K; i++ )
+//   //   set_d_with_s( mat->data[c[i]], mat->size[c[i]], centers[i] );// put the centres in Centers matrix using c[i]
+
+//   // _float** cosines;
+//   // init_2d_float( K, nc, cosines );// finding cosines with each centre.There are K centres.
+  
+//   partition.resize( nc );
+
+//   _float old_cos = -10000;
+//   _float new_cos = -1;
+//   _int best_center = 0;
+//   _float best_sim  = 0;
+
+//   while( new_cos - old_cos >= acc ) {
+
+//     for( _int i=0; i<K; i++ ) {
+//       for( _int j=0; j<nc; j++ )
+//   cosines[i][j] = mult_d_s_vec( centers[i], mat->data[j], mat->size[j] ); // compute cosine sim
+//     }
+
+
+//     if(KMEANS_DEBUG)
+//       cout << "cosine done" << endl;
+
+//     //vector<vector<float>> best_values(K, vector<float>(nc,0));
+//     vector<vector<pair<_int, _float>>>v(K);
+//     old_cos = new_cos;
+//     new_cos = 0;
+//     for( _int j=0; j<nc; j++ ) {
+//               best_sim = 0;
+//               best_center = 0;
+//               for( _int i=0; i<K; i++){
+//           // cout << "cosines[i][j]=" << cosines[i][j] << endl;
+//                       if(cosines[i][j] > best_sim){
+//                         best_sim = cosines[i][j];
+//                         best_center = i;
+//                    }
+//               }
+//               assert(best_center >= 0);
+//               assert(best_center < K);
+
+//               partition[j] = best_center;
+//               //best_values[best_center][j] = best_sim; 
+//               v[best_center].push_back(make_pair(j, best_sim));
+//               new_cos += best_sim;
+//     }
+
+//      // for(_int j = 0 ; j < K; j++)
+//      //          cout << v[j].size()<<" ";
+//      //        cout << endl;
+//     _int mask[nc] = {0};
+//     _int mask1[K] = {0};
+//     _int loop = 0;
+//     for(_int i =0 ; i < K; i++){
+      
+//       if(v[i].size()> max_nodes){
+//         mask1[i] = 1;
+//             sort(v[i].begin(), v[i].end(), sortbysec);
+//             for(_int j = 0; j < max_nodes; j++){
+//               pair<int,float>temp = v[i][j];
+//               partition[temp.first] = i;
+//               mask[temp.first] = 1;
+//             }
+//             for(_int j = max_nodes; j< v[i].size(); j++){
+//               pair<int, float> temp = v[i][j];
+//               cosines[i][temp.first] = 0;
+//             }
+//             //_int temp1 = v[i].size();
+//       // cout << v[i].size()<< " ";
+//             v[i].erase(v[i].begin()+max_nodes, v[i].end());
+//       // cout << v[i].size()<< endl;
+//             for(_int j = 0 ; j < K; j++)if(mask1[j] == 0)v[j].erase(v[j].begin(), v[j].end());
+
+//             for( _int j=0; j<nc; j++ ) {
+//                   if(mask[j] == 1)continue;
+
+//                   best_sim = 0;
+//                   best_center = 0;
+//                   for( _int l=i+1; l<K; l++){
+//                           // cout << "cosines[i][j]=" << cosines[i][j] << endl;
+//                           if(cosines[l][j] > best_sim){
+//                             best_sim = cosines[l][j];
+//                             best_center = l;
+//                        }
+//                   }
+//                   v[best_center].push_back(make_pair(j, best_sim));
+//             }
+
+
+//       }
+
+//       else{
+//             for(_int j = 0; j < v[i].size(); j++){
+//               pair<int, float>temp = v[i][j];
+//               partition[temp.first] = i;
+//               mask[temp.first]= 1;
+//             }
+//       }
+
+//             for(_int j = 0 ; j < K; j++)
+//               cout << v[j].size()<<" ";
+//             cout << endl;
+
+//     }
+
+
+
+//     if(KMEANS_DEBUG)
+//       cout << "find closest neighbour done" << endl;
+
+//     new_cos /= nc;
+
+//     reset_2d_float( K, nr, centers );
+
+//     for( _int i=0; i<nc; i++ ) {
+//       _int p = partition[ i ];
+//       add_s_to_d_vec( mat->data[i], mat->size[i], centers[ p ] );
+//     }
+
+//     for( _int i=0; i<K; i++ )
+//       normalize_d_vec( centers[i], nr );
+
+//     if(KMEANS_DEBUG) {
+//       cout << "re-centering done" << endl;
+//       cout << "new_cos - old_cos = " << new_cos - old_cos << endl;
+//     }
+//   }
+  
+
+//   // for partition with one element,
+//   // marge it to the closest partition
+
+//   // get label frequency first
+//   vector<_int> label_count(partition.size());
+//   for(auto l : partition)
+//     label_count[l] += 1;
+
+//   bool changed = false;
+//   for(_int j=0; j<partition.size(); j++){
+//     if(label_count[partition[j]] == 1){
+//       cout << "label " << partition[j] << " is singleton" << endl;
+//       // to cloest partition
+//       best_center = 0;
+//       best_sim = 0;
+//       for( _int i=0; i<K; i++){
+//   // not itself
+//   if(cosines[i][j] > best_sim && i != partition[j]){
+//     best_sim = cosines[i][j];
+//     best_center = i;
+//   }
+//       }
+//       assert(best_center >= 0);
+//       assert(best_center < K);
+
+//       cout << "gets assigned to partition " << best_center << endl;
+//       partition[j] = best_center;
+//       // now a new member for `best_center`
+//       label_count[best_center]++;
+//     }
+//   }
+
+//   // there can be empty clusters
+//   // reindex the partition s.t. partition ids are contiguous
+//   squeeze_partition_array(partition);
+//   // unordered_set<_int> partition_set = unordered_set<_int> (partition.begin(), partition.end());
+//   // vector<_int> unique_part_ids (partition_set.begin(), partition_set.end());
+//   // vector<_int> old2new(partition.size());
+//   // for(_int i=0; i<unique_part_ids.size(); i++)
+//   //   old2new[unique_part_ids[i]] = i;
+//   // for(_int i=0; i<partition.size(); i++)
+//   //   partition[i] = old2new[partition[i]];  
+
+  
+//   // release memory
+//   delete_2d_float( K, nr, centers );
+//   delete_2d_float( K, nc, cosines );
+//   if(KMEANS_DEBUG)
+//     cout << "delete done" << endl;
+
+//   cout << "time spent on kmeans: " << timer.stop() << " secs" << endl;
+// }
+/////////////////////Again Balanced Kmeans//////////////////
+
+void balancedkmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
+  // acc: accuracy parameter, when smaller than this, the iteration stops
+  // should be epsilon
+  Timer timer;
+  timer.resume();
+
+  _int nc = mat->nc;  // number of data points
+  _int nr = mat->nr; // feature dim
+
+  _int max_size = nc / K ;
+  
+  vector<_int> c(K);
+    cout<<"kmeansplusplus started"<<endl;
+    //c = kmeansplusplus(mat, K);
+    cout<<"kmeansplusplus ended"<<endl;
+    c = pick(nc, K);
+  
+  
+  if(KMEANS_DEBUG) {
+    cout << "c: ";
+    std::copy(c.begin(), c.end(), std::ostream_iterator<int>(std::cout, " "));
+    cout << endl;
+  }
+
+  _float** centers;
+  init_2d_float(K, nr, centers );//initialize K centres with nr dimension
+  reset_2d_float(K, nr, centers );
+  for( _int i=0; i<K; i++ )
+    set_d_with_s( mat->data[c[i]], mat->size[c[i]], centers[i] );// put the centres in Centers matrix using c[i]
+
+  _float** cosines;
+  init_2d_float( K, nc, cosines );// finding cosines with each centre.There are K centres.
+  
+  partition.resize( nc );
+
+  _float old_cos = -10000;
+  _float new_cos = -1;
+  _int best_center = 0;
+  _float best_sim  = 0;
+
+  while( new_cos - old_cos >= acc ) {
+
+    for( _int i=0; i<K; i++ ) {
+      for( _int j=0; j<nc; j++ )
+  cosines[i][j] = mult_d_s_vec( centers[i], mat->data[j], mat->size[j] ); // compute cosine sim
+    }
+
+    if(KMEANS_DEBUG)
+      cout << "cosine done" << endl;
+
+    vector<vector<pair<_int, _float>>>v(K);
+
+    old_cos = new_cos;
+    new_cos = 0;
+    for( _int j=0; j<nc; j++ ) {
+              best_sim = 0;
+              best_center = 0;
+              for( _int i=0; i<K; i++){
+          // cout << "cosines[i][j]=" << cosines[i][j] << endl;
+                      if(cosines[i][j] > best_sim){
+                        best_sim = cosines[i][j];
+                        best_center = i;
+                   }
+              }
+              //assert(best_center >= 0);
+              //assert(best_center < K);
+              v[best_center].push_back(make_pair(j, best_sim));
+              //partition[j] = best_center;
+              new_cos += best_sim;
+    }
+
+    _int total_centers = K ;
+    _int row_mask[K] = {0};
+    _int col_mask[nc] = {0};
+    cout << total_centers <<endl;
+    while(total_centers){
+      //cout << total_centers <<endl;
+      for(_int i = 0; i < K ; i++){
+        if(row_mask[i] == 1)continue;
+
+        if(v[i].size() >= max_size){
+          row_mask[i] = 1;
+          sort(v[i].begin(), v[i].end(), sortbysec);
+          
+          for(_int j = 0; j < max_size; j++){
+            pair<_int, _float>temp = v[i][j];
+            partition[temp.first] = i;
+            col_mask[temp.first] = 1;
+          }
+          for(_int j = max_size; j < v[i].size(); j++)cosines[i][j] = 0;
+
+          v[i].erase(v[i].begin()+max_size, v[i].end());
+          total_centers--;
+        }
+      }
+
+      for(_int i = 0; i < K; i++){
+        if(row_mask[i] == 1)continue;
+        else v[i].erase(v[i].begin(), v[i].end());
+      }
+
+       new_cos = 0;
+    for( _int j=0; j<nc; j++ ) {
+        if(col_mask[j] == 1)continue;
+              best_sim = 0;
+              best_center = 0;
+              for( _int i=0; i<K; i++){
+          // cout << "cosines[i][j]=" << cosines[i][j] << endl;
+                      if(row_mask[i] == 1)continue;
+                      if(cosines[i][j] > best_sim){
+                        best_sim = cosines[i][j];
+                        best_center = i;
+                   }
+              }
+              //assert(best_center >= 0);
+              //assert(best_center < K);
+              v[best_center].push_back(make_pair(j, best_sim));
+              //partition[j] = best_center;
+              new_cos += best_sim;
+    }
+
+
+    }
+    
+
+
+
+
+    if(KMEANS_DEBUG)
+      cout << "find closest neighbour done" << endl;
+
+    new_cos /= nc;
+
+    reset_2d_float( K, nr, centers );
+
+    for( _int i=0; i<nc; i++ ) {
+      _int p = partition[ i ];
+      add_s_to_d_vec( mat->data[i], mat->size[i], centers[ p ] );
+    }
+
+    for( _int i=0; i<K; i++ )
+      normalize_d_vec( centers[i], nr );
+
+    if(KMEANS_DEBUG) {
+      cout << "re-centering done" << endl;
+      cout << "new_cos - old_cos = " << new_cos - old_cos << endl;
+    }
+  }
+  
+
+  // for partition with one element,
+  // marge it to the closest partition
+
+  // get label frequency first
+  vector<_int> label_count(partition.size());
+  for(auto l : partition)
+    label_count[l] += 1;
+
+  bool changed = false;
+  for(_int j=0; j<partition.size(); j++){
+    if(label_count[partition[j]] == 1){
+      cout << "label " << partition[j] << " is singleton" << endl;
+      // to cloest partition
+      best_center = 0;
+      best_sim = 0;
+      for( _int i=0; i<K; i++){
+  // not itself
+  if(cosines[i][j] > best_sim && i != partition[j]){
+    best_sim = cosines[i][j];
+    best_center = i;
+  }
+      }
+      assert(best_center >= 0);
+      assert(best_center < K);
+
+      cout << "gets assigned to partition " << best_center << endl;
+      partition[j] = best_center;
+      // now a new member for `best_center`
+      label_count[best_center]++;
+    }
+  }
+
+  // there can be empty clusters
+  // reindex the partition s.t. partition ids are contiguous
+  squeeze_partition_array(partition);
+  // unordered_set<_int> partition_set = unordered_set<_int> (partition.begin(), partition.end());
+  // vector<_int> unique_part_ids (partition_set.begin(), partition_set.end());
+  // vector<_int> old2new(partition.size());
+  // for(_int i=0; i<unique_part_ids.size(); i++)
+  //   old2new[unique_part_ids[i]] = i;
+  // for(_int i=0; i<partition.size(); i++)
+  //   partition[i] = old2new[partition[i]];  
+
+  
+  // release memory
+  delete_2d_float( K, nr, centers );
+  delete_2d_float( K, nc, cosines );
+  if(KMEANS_DEBUG)
+    cout << "delete done" << endl;
+
+  cout << "time spent on kmeans: " << timer.stop() << " secs" << endl;
+}
+
+/////////////////////Balanced Kmeans///////////////
 void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   // acc: accuracy parameter, when smaller than this, the iteration stops
   // should be epsilon
@@ -778,13 +1225,13 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   }
 
   _float** centers;
-  init_2d_float(K, nr, centers );
+  init_2d_float(K, nr, centers );//initialize K centres with nr dimension
   reset_2d_float(K, nr, centers );
   for( _int i=0; i<K; i++ )
-    set_d_with_s( mat->data[c[i]], mat->size[c[i]], centers[i] );
+    set_d_with_s( mat->data[c[i]], mat->size[c[i]], centers[i] );// put the centres in Centers matrix using c[i]
 
   _float** cosines;
-  init_2d_float( K, nc, cosines );
+  init_2d_float( K, nc, cosines );// finding cosines with each centre.There are K centres.
 	
   partition.resize( nc );
 
@@ -807,20 +1254,20 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
     old_cos = new_cos;
     new_cos = 0;
     for( _int j=0; j<nc; j++ ) {
-      best_sim = 0;
-      best_center = 0;
-      for( _int i=0; i<K; i++){
-	// cout << "cosines[i][j]=" << cosines[i][j] << endl;
-	if(cosines[i][j] > best_sim){
-	  best_sim = cosines[i][j];
-	  best_center = i;
-	}
-      }
-      assert(best_center >= 0);
-      assert(best_center < K);
+              best_sim = 0;
+              best_center = 0;
+              for( _int i=0; i<K; i++){
+        	// cout << "cosines[i][j]=" << cosines[i][j] << endl;
+                    	if(cosines[i][j] > best_sim){
+                    	  best_sim = cosines[i][j];
+                    	  best_center = i;
+        	         }
+              }
+              assert(best_center >= 0);
+              assert(best_center < K);
 
-      partition[j] = best_center;
-      new_cos += best_sim;
+              partition[j] = best_center;
+              new_cos += best_sim;
     }
 
     if(KMEANS_DEBUG)
@@ -904,7 +1351,7 @@ void split_node_kmeans( Node* node, SMatF* X_Xf, SMatF* Y_X, SMatF* cent_mat, _i
   if(KMEANS_DEBUG)
     cout << "partition using KMEANS" << endl;
   // change to graph partitioning
-  kmeans( cent_mat, param.kmeans_eps, partition, param.num_children);
+  balancedkmeans( cent_mat, param.kmeans_eps, partition, param.num_children);
 
   // get the assignment matrix of 2 columns, whether left or right
   if(KMEANS_DEBUG){
