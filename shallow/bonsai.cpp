@@ -1212,9 +1212,9 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   _int nr = mat->nr; // feature dim
   
   vector<_int> c(K);
-  	cout<<"kmeansplusplus started"<<endl;
+  	// cout<<"kmeansplusplus started"<<endl;
     //c = kmeansplusplus(mat, K);
-  	cout<<"kmeansplusplus ended"<<endl;
+  	// cout<<"kmeansplusplus ended"<<endl;
     c = pick(nc, K);
   
   
@@ -1351,8 +1351,8 @@ void split_node_kmeans( Node* node, SMatF* X_Xf, SMatF* Y_X, SMatF* cent_mat, _i
   if(KMEANS_DEBUG)
     cout << "partition using KMEANS" << endl;
   // change to graph partitioning
-  balancedkmeans( cent_mat, param.kmeans_eps, partition, param.num_children);
-
+  // balancedkmeans( cent_mat, param.kmeans_eps, partition, param.num_children);
+  kmeans( cent_mat, param.kmeans_eps, partition, param.num_children);
   // get the assignment matrix of 2 columns, whether left or right
   if(KMEANS_DEBUG){
     cout << "partition.size() = " << partition.size() << endl;
