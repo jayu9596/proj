@@ -3,7 +3,9 @@ import predict
 import time as tm
 import numpy as np
 from scipy import sparse as sps
-
+##edited
+import os
+##edited
 
 # This file is intended to demonstrate how we would evaluate your code
 # The data loader needs to know how many feature dimensions and labels are there
@@ -11,10 +13,15 @@ d = 16385
 L = 3400
 (X, y) = utils.load_data( "data", d, L )
 # Get recommendations from predict.py and time the thing
+
+
 tic = tm.perf_counter()
 yPred = predict.getReco( X, 5 )
 toc = tm.perf_counter()
-
+##edited
+prec=open("compare-Kmeansplusplus-prec.txt","a")
+mprec=open("compare-Kmeans-mprecplusplus.txt","a")
+##edited
 print( "Total time taken is %.6f seconds " % (toc - tic) )
 
 # Need to do a bit reshaping since what we get is technically a sparse matrix
@@ -27,5 +34,25 @@ mpreck = np.asarray( utils.getMPrecAtK( y, yPred, 5 ) ).reshape(-1)
 # See the definition of mprec@k and prec@k carefully to convince yourself why this is so
 
 print( "prec@1: %0.3f" % preck[0], "prec@3: %0.3f" % preck[2], "prec@5: %0.3f" % preck[4] )
+##edited
+precstr=""
+precstr="%0.3f" % preck[0]
+precstr=precstr+",%0.3f" % preck[2]
+precstr=precstr+",%0.3f" % preck[4]+"\n"
+print("Prec Written")
+prec.write(precstr)
+##edited
+
+
 # Dont be surprised if mprec is very small -- it is really hard to do well on rare labels
 print( "mprec@1: %0.3e" % mpreck[0], "mprec@3: %0.3e" % mpreck[2], "mprec@5: %0.3e" % mpreck[4] )
+
+##edited
+mprecstr=""
+mprecstr="%0.3f" % mpreck[0]
+mprecstr=mprecstr+",%0.3f" % mpreck[2]
+mprecstr=mprecstr+",%0.3f" % mpreck[4]+"\n"
+mprec.write(mprecstr)
+print("Mprec Written")
+
+##edited

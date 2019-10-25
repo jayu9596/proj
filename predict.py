@@ -23,6 +23,9 @@ def getReco( X, k ):
     # Find out how many data points we have
     n = X.shape[0]
     L = 3400
+    
+    
+
     # Load and unpack the dummy model
     # The dummy model simply stores the labels in decreasing order of their popularity
     in_path=""
@@ -53,7 +56,7 @@ def getReco( X, k ):
 
     print(yPred)
     print(yPred.shape)
-
+    
     '''
     # Let us predict a random subset of the 2k most popular labels no matter what the test point
     shortList = model[0:2*k]
@@ -62,6 +65,7 @@ def getReco( X, k ):
     for i in range( n ):
         yPred[i,:] = rand.permutation( shortList )[0:k]
     '''
+
     return yPred
 
 

@@ -1212,10 +1212,10 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   _int nr = mat->nr; // feature dim
   
   vector<_int> c(K);
-  	// cout<<"kmeansplusplus started"<<endl;
-    //c = kmeansplusplus(mat, K);
-  	// cout<<"kmeansplusplus ended"<<endl;
-    c = pick(nc, K);
+  	 cout<<"kmeansplusplus started"<<endl;
+    c = kmeansplusplus(mat, K);
+  	 cout<<"kmeansplusplus ended"<<endl;
+    //c = pick(nc, K);
   
   
   if(KMEANS_DEBUG) {
