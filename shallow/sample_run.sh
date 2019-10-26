@@ -13,6 +13,7 @@ tst_lbl_file="${data_dir}/tst_X_Y.txt"
 score_file="${results_dir}/score_mat.txt"
 
 mkdir -p $model_dir
+
 # training
 # Reads training features (in $trn_ft_file), training labels (in $trn_lbl_file), and writes FastXML model to $model_dir
 
@@ -20,6 +21,7 @@ mkdir -p $model_dir
 #       and to 3 for larger datasets like Delicious-200K, WikiLSHTC-325K, Amazon-670K, Wikipedia-500K, Amazon-3M.
 
 cd shallow
+make
 # ./bonsai_train $trn_ft_file $trn_lbl_file $trn_ft_lbl_file $model_dir \
 #     -T 1 \
 #     -s 0 \

@@ -27,26 +27,17 @@ def getReco( X, k):
     L = 3400
     # Load and unpack the dummy model
     # The dummy model simply stores the labels in decreasing order of their popularity
-    in_path=""
+    
     out_path="sandbox/data/Assn2/"
+    
     model_dir = "sandbox/results/Assn2/"
-    print("Test Data Dump Started\n\n")
-    tic = tm.perf_counter()
-    dump_food(X,in_path,out_path)
-    toc = tm.perf_counter()
-
-    print("Test Data Dump Completed in : %0.6f"% (toc-tic))
     
-    tic = tm.perf_counter()
+    dump_food(X,out_path)
     os.system("bash shallow/sample_run.sh")
-    toc = tm.perf_counter()    
-    print("Actual Prediction for score matrix : %0.6f"% (toc-tic))
-
     filename = model_dir + "score_mat"
-    yPred = np.zeros( (n, k), dtype=int )
     
-    tic = tm.perf_counter()
     Xp, _ = load_svmlight_file( "%s.txt" %filename, multilabel = True, n_features = L, offset = 1 )
+    yPred = np.zeros( (n, k), dtype=int )
     for ind, user in enumerate(Xp):
         d = user.data
         i = user.indices
@@ -54,10 +45,8 @@ def getReco( X, k):
         xf = xf[xf[:,1].argsort()[::-1]]
         for j in range(0,k):
             yPred[ind][j]=xf[j][0]
-
-    toc = tm.perf_counter()    
-    print("loading score and finding top 5 in : %0.6f"% (toc-tic))
     print(yPred)
+    print(yPred.shape)
     '''
     # Let us predict a random subset of the 2k most popular labels no matter what the test point
     shortList = model[0:2*k]
@@ -66,19 +55,18 @@ def getReco( X, k):
     for i in range( n ):
         yPred[i,:] = rand.permutation( shortList )[0:k]
     '''
-
     return yPred
 
 
-def dump_food( matrix_test, in_path, out_path):
+def dump_food( matrix_test, out_path):
     (n, d) = matrix_test.shape
     dummy = sps.csr_matrix( (n, 1) )
     dump_svmlight_file( matrix_test, dummy, "test_data.X", multilabel = True, zero_based = True, comment = "%d %d" % (n, d) )   
 
-    test_ws=open(in_path+"test_data.X","r")
+    test_ws=open("test_data.X","r")
     test_is=open(out_path+"tst_X_Xf.txt","w")
     lines=test_ws.readlines()
-    for i in range(1,len(lines)):
+    for i in range(0,len(lines)):
         if(lines[i][0]=='#'):
             if(len(lines[i])>2):
                 if(not(lines[i][2]<='9' and lines[i][2]>='0')):
@@ -93,4 +81,5 @@ def dump_food( matrix_test, in_path, out_path):
             test_is.write(lines[i])
 
     test_is.close()
+    os.system("rm test_data.X")
 

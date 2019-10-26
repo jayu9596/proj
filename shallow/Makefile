@@ -6,7 +6,7 @@ LIBFLAGS=-pthread
 INC=-I../tools/c++ 
 
 
-all: bonsai_train  bonsai_predict
+all: bonsai_predict
 
 bonsai_train: helpers.o bonsai_train.cpp bonsai.cpp
 	$(CXX) -o bonsai_train $(CXXFLAGS) $(INC) bonsai_train.cpp bonsai.cpp helpers.o $(LIBFLAGS)
