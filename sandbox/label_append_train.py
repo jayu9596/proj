@@ -3,7 +3,7 @@ import sys
 dataset = sys.argv[1]
 print(dataset)
 
-path = "data/{}/".format(dataset)
+path = "data/{}".format(dataset)
 trn_X_file = open('{}/trn_X_Xf.txt'.format(path), 'r')
 trn_Y_file = open('{}/trn_X_Y.txt'.format(path), 'r')
 fout = open('{}/trn_X_XY.txt'.format(path), 'w')

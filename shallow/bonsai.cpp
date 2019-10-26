@@ -1205,6 +1205,7 @@ void balancedkmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
 void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   // acc: accuracy parameter, when smaller than this, the iteration stops
   // should be epsilon
+  cout<<"kmeans started"<<endl;
   Timer timer;
   timer.resume();
 
@@ -1212,10 +1213,11 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   _int nr = mat->nr; // feature dim
   
   vector<_int> c(K);
-  	 cout<<"kmeansplusplus started"<<endl;
-    c = kmeansplusplus(mat, K);
-  	 cout<<"kmeansplusplus ended"<<endl;
-    //c = pick(nc, K);
+  	 
+    // c = kmeansplusplus(mat, K);
+
+  	 
+    c = pick(nc, K);
   
   
   if(KMEANS_DEBUG) {
@@ -1342,6 +1344,7 @@ void kmeans( SMatF* mat, _float acc, VecI& partition, _int K) {
   if(KMEANS_DEBUG)
     cout << "delete done" << endl;
 
+  cout<<"kmeans ended"<<endl;
   cout << "time spent on kmeans: " << timer.stop() << " secs" << endl;
 }
 

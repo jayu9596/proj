@@ -1,6 +1,6 @@
 #! /bin/zsh
 
-datasets=(eurlex)
+datasets=(Assn2)
 
 
 for dataset in ${datasets}; do

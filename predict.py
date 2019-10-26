@@ -1,3 +1,4 @@
+
 import numpy as np
 from numpy import random as rand
 from scipy import sparse as sps
@@ -19,7 +20,7 @@ import os
 # The returned matrix will always be a dense matrix and it terribly slows things down to store it in csr format
 # The evaluation code may misbehave and give unexpected results if an nd-array is not returned
 
-def getReco( X, k ):
+def getReco( X, k, k1, d):
     # Find out how many data points we have
     n = X.shape[0]
     L = 3400
@@ -38,7 +39,7 @@ def getReco( X, k ):
     print("Test Data Dump Completed")
     print(" ")
     print("Prediction Sarted.")
-    os.system("bash shallow/sample_run.sh")
+    os.system("bash shallow/sample_run.sh "+str(k1)+" "+str(d))
 
     filename = model_dir + "score_mat"
 

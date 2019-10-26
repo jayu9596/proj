@@ -13,7 +13,6 @@ tst_lbl_file="${data_dir}/tst_X_Y.txt"
 score_file="${results_dir}/score_mat.txt"
 
 mkdir -p $model_dir
-
 # training
 # Reads training features (in $trn_ft_file), training labels (in $trn_lbl_file), and writes FastXML model to $model_dir
 
@@ -25,10 +24,10 @@ cd shallow
     -T 1 \
     -s 0 \
     -t 1 \
-    -w 100 \
+    -w $(($1)) \
     -b 1.0 \
     -c 1.0 \
-    -m 2 \
+    -m $(($2)) \
     -f 0.1 \
     -fcent 0 \
     -k 0.0001 \
