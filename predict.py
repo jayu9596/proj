@@ -37,7 +37,9 @@ def getReco( X, k):
     filename = model_dir + "score_mat"
     
     Xp, _ = load_svmlight_file( "%s.txt" %filename, multilabel = True, n_features = L, offset = 1 )
+
     yPred = np.zeros( (n, k), dtype=int )
+
     for ind, user in enumerate(Xp):
         d = user.data
         i = user.indices
@@ -45,8 +47,8 @@ def getReco( X, k):
         xf = xf[xf[:,1].argsort()[::-1]]
         for j in range(0,k):
             yPred[ind][j]=xf[j][0]
-    print(yPred)
-    print(yPred.shape)
+    os.system("rm sandbox/data/Assn2/tst_X_Xf.txt")
+    os.system("rm sandbox/results/Assn2/score_mat.txt")
     '''
     # Let us predict a random subset of the 2k most popular labels no matter what the test point
     shortList = model[0:2*k]
