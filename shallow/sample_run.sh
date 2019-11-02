@@ -3,7 +3,7 @@
 dataset="Assn2"
 data_dir="../sandbox/data/$dataset"
 results_dir="../sandbox/results/$dataset"
-model_dir="../sandbox/results/$dataset/model"
+model_dir="../model"
 
 trn_ft_file="${data_dir}/trn_X_Xf.txt"
 trn_lbl_file="${data_dir}/trn_X_Y.txt"
@@ -12,7 +12,7 @@ tst_ft_file="${data_dir}/tst_X_Xf.txt"
 tst_lbl_file="${data_dir}/tst_X_Y.txt"
 score_file="${results_dir}/score_mat.txt"
 
-mkdir -p $model_dir
+
 
 # training
 # Reads training features (in $trn_ft_file), training labels (in $trn_lbl_file), and writes FastXML model to $model_dir
@@ -21,7 +21,9 @@ mkdir -p $model_dir
 #       and to 3 for larger datasets like Delicious-200K, WikiLSHTC-325K, Amazon-670K, Wikipedia-500K, Amazon-3M.
 
 cd shallow
+# mkdir -p $model_dir
 make
+
 # ./bonsai_train $trn_ft_file $trn_lbl_file $trn_ft_lbl_file $model_dir \
 #     -T 1 \
 #     -s 0 \
